@@ -4,12 +4,12 @@ import java.util.Objects;
 
 public class PolybiusSquare {
 
-    String[][] carre;
+    String[][] scare;
 
     public PolybiusSquare(){
 
         // Initializing Polybius' square
-        this.carre = new String[][]{
+        this.scare = new String[][]{
                 {"z",   "k",    "l",    "m",    "n"},
                 {"y",   "i/j",  "b",    "c",    "o"},
                 {"x",   "h",    "a",    "d",    "p"},
@@ -23,34 +23,34 @@ public class PolybiusSquare {
      * @param message : string, words to encrypt
      * @return string: Encrypted words
      */
-    public StringBuilder chiffre(String message){
+    public String encryption(String message){
 
-        System.out.println("Message à chiffrer avec le carre de polybe: "+ message);
-        StringBuilder resultat = new StringBuilder();
-        String tmpLettre;
+        System.out.println("Message à chiffrer avec le scare de polybe: "+ message);
+        StringBuilder result = new StringBuilder();
+        String tmpLetter;
 
         // Message letter browsing
         for (int i=0; i<message.length();i++){
 
-            tmpLettre = String.valueOf(message.charAt(i));
+            tmpLetter = String.valueOf(message.charAt(i));
 
-            if (tmpLettre.equals(" ")){
+            if (tmpLetter.equals(" ")){
                 // Keep the space
-                resultat.append(" ");
+                result.append(" ");
             }else {
 
                 String[] tmpList;
                 // Square course
-                for (int y = 0; y < carre.length; y++) {
-                    tmpList = carre[y];
+                for (int y = 0; y < scare.length; y++) {
+                    tmpList = scare[y];
 
                     // Browse square sub-lists
                     for (int z = 0; z < tmpList.length; z++) {
 
                         // If we find the letter in the square, we add the coordinates
-                        if (Objects.equals(tmpList[z], tmpLettre)) {
-                            //System.out.println("Lettre trouvé: " + tmpLettre + ", position: " + y + "," + z);
-                            resultat.append(y).append(z);
+                        if (tmpList[z].indexOf(tmpLetter) != -1) {
+                            //System.out.println("Letter trouvé: " + tmpLetter + ", position: " + y + "," + z);
+                            result.append(y).append(z);
                             break;
                         }
                     }
@@ -58,7 +58,45 @@ public class PolybiusSquare {
             }
 
         }
-        return resultat;
+        return result.toString();
+    }
+
+    /**
+     * Deciphers a message thanks to the double-dimensional board. Can receive spaces 
+     * @param messageEncryption : String, message encrypted by the same array
+     * @return : String, message decrypted with spaces
+     */
+    public String decipher(String messageEncryption){
+
+        System.out.println("Message à déchiffrer: "+messageEncryption);
+        StringBuilder result = new StringBuilder();
+        String[] partOfMessage = messageEncryption.split(" ");
+        String x;
+        String y;
+
+        // Separate the message between each line break
+        // We then go through the strings two by two to retrieve the x and y indexes
+        // These will be used to retrieve a string from the double-dimensional array
+
+        for (String travelNumber : partOfMessage){
+
+            for (int i=0;i<travelNumber.length();i+=2){
+
+                // Directly retrieving the variable travelNumber.charAt(i) as an int does not retrieve the correct value
+                // To avoid a change when retrieving the char, we store the value in a string, which will be caster as an int
+
+                x = String.valueOf(travelNumber.charAt(i));
+                y = String.valueOf(travelNumber.charAt(i+1));
+                //System.out.println("{"+x+" "+travelNumber.charAt(i)+"} : " + y);
+                result.append(scare[Integer.valueOf(x)][Integer.valueOf(y)]);
+            }
+
+            result.append(" ");
+
+        }
+        // Delete the last excess space generated
+        result.delete(result.length(), result.length());
+        return result.toString();
     }
 
 }

@@ -6,6 +6,11 @@ import encryption.PolybiusSquare;
 public class Main {
     public static void main(String[] args) {
        PolybiusSquare polybiusSquare = new PolybiusSquare();
-       System.out.println(polybiusSquare.chiffre("zzzzrraa"));
+       
+       String messageEncryption = polybiusSquare.encryption("iest eesti");
+       System.out.println(messageEncryption);
+
+       String message = polybiusSquare.decipher(messageEncryption);
+       System.out.println(message);
     }
 }
