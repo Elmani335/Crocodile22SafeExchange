@@ -7,14 +7,13 @@ import utils.FileHandler;
 
 public abstract class MotherEncryption {
 
-    // Type de chiffrement
+    // Encryption type
     String type;
 
     /**
      * Encrypts a message according to a key
      * @param message : String, words to encrypt
      * @param key : String, key used to encrypt
-     * 
      * @return String : Ciphered words
      */
     public abstract String encryption(String message, String key);
@@ -26,6 +25,9 @@ public abstract class MotherEncryption {
      */
     public abstract String decipher(String messageEncryption, String key);
 
+    /**
+     * 
+     */
     public void controlPoster(){
         
         Scanner scanner = new Scanner(System.in);
@@ -82,9 +84,9 @@ public abstract class MotherEncryption {
         String encrypted = encryption(text, key);
         System.out.println("Encrypted Message: " + encrypted);
 
-        System.out.println("Voulez vous l'écrire dans un fichier");
-        System.out.println(" 1. Oui");
-        System.out.println(" 0. Non");
+        System.out.println("Do you want to write it to a");
+        System.out.println(" 1. Yes");
+        System.out.println(" 0. No");
 
         String response = scanner.nextLine();
         int choice;
@@ -95,7 +97,7 @@ public abstract class MotherEncryption {
 
                 switch (choice) {
                     case 1:
-                        FileHandler.WriteFile("./", "message", encrypted);
+                        FileHandler.writeToFile("./", "message", encrypted);
                         backToMainMenu = true;
                         break;
                     case 0:
@@ -110,22 +112,27 @@ public abstract class MotherEncryption {
         }
     }
 
+    /**
+     * Demande à l'utilisateur à déchiffrer un message ou à un fichier
+     */
     private void performDecryption() {
 
+        // First request to know if it's reading or decrypting a variable
         Scanner scanner = new Scanner(System.in);
         int choice;
         boolean backToMainMenu = false;
-        System.out.println("Voulez vous lire un fichier ?");
-        System.out.println(" 1. Oui");
-        System.out.println(" 0. Non");
+        System.out.println("Do you want to read a file?");
+        System.out.println(" 1. Yes");
+        System.out.println(" 0. No");
         String response = scanner.nextLine();
-
 
         while (!backToMainMenu) {
             try {
                 choice = Integer.parseInt(response);
-
+                
                 switch (choice) {
+
+                    // Play a file
                     case 1:
                         System.out.print("Read...");
                         System.out.print("Enter the decryption key: ");
@@ -134,9 +141,15 @@ public abstract class MotherEncryption {
                         System.out.print(resultFile);
                         backToMainMenu = true;
                         break;
+
+                    // Decrypt a message
                     case 0:
+
+                        // Message retrieval
                         System.out.print("\nEnter the text to decrypt: ");
                         String text = scanner.nextLine();
+
+                        // Key recovery
                         System.out.print("Enter the decryption key: ");
                         key = scanner.nextLine();
                         
@@ -144,7 +157,8 @@ public abstract class MotherEncryption {
                             System.out.println("Text and key cannot be empty.");
                             return;
                         }
-
+                        
+                        // Message decryption
                         String decrypted = decipher(text, key);
                         System.out.println("Decrypted Message: " + decrypted);
                         backToMainMenu = true;
