@@ -10,22 +10,21 @@ import encryption.MotherEncryption;
 public abstract class FileHandler {
 
     /**
-     * Writes a file with encrypted content
-     * @param path : String, location where the file will be written
-     * @param fileName : String, File name
-     * @param content : String, encrypted content to be written to the file
-     * @return : String, message warning of operation success or failure
+     * Writes content to a file. Appends if the file already exists.
+     *
+     * @param path     The path where the file is located or will be created.
+     * @param fileName The name of the file (without extension).
+     * @param content  The content to write into the file.
+     * @return Status message of the write operation.
      */
-    public static String WriteFile(String path,String fileName, String content){
-
-        try (FileWriter writer = new FileWriter(path+fileName+".txt")) {
-            writer.write(content); // Write content to file
-            return "The text was written in the"+fileName+".txt";
+    public static String writeToFile(String path, String fileName, String content) {
+        try (FileWriter writer = new FileWriter(path + fileName + ".txt", true)) { // 'true' enables appending
+            writer.write(content + System.lineSeparator()); // Appends content to the file with a new line
+            return "The text was appended to " + fileName + ".txt";
         } catch (IOException e) {
-            //System.err.println("An error has occurred while writing to the file.");
             e.printStackTrace();
+            return "An error has occurred while writing to the file.";
         }
-        return "An error has occurred while writing to the file.";
     }
 
     /**

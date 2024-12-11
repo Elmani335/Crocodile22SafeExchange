@@ -12,13 +12,17 @@ public class PolybiusSquare extends MotherEncryption{
                 {"v",   "u",    "t",    "s",    "r"}
         };
 
+
+    public PolybiusSquare(){
+        this.type = "Polybius";
+    }
+
     /**
      * Ciphers a message by changing the letters into numbers according to the nearest square.
      * @param message : String, words to encrypt
      * @param key : String, value null
      * @return String: Encrypted words
      */
-
     @Override
     public String encryption(String message, String key){
 
