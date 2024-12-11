@@ -2,19 +2,27 @@
 package menu;
 
 import java.util.Scanner;
-
 import encryption.MotherEncryption;
 import encryption.PolybiusSquare;
 import encryption.VigenereCipher;
+import encryption.RotXEncryption;
+// import encryption.Help;
 
 public class Menu {
     MotherEncryption polybius;
     MotherEncryption vigenere;
+    MotherEncryption rotX;
+
+    public Menu() {
+        // Initialize encryptions
+        polybius = new PolybiusSquare();
+        vigenere = new VigenereCipher();
+        rotX = new RotXEncryption();
+    }
+
     public void display() {
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
-        polybius = new PolybiusSquare();
-        vigenere = new VigenereCipher();
 
         while (!exit) {
             System.out.println("\n=====================================");
@@ -22,6 +30,7 @@ public class Menu {
             System.out.println("=====================================");
             System.out.println(" 1. Vigenère");
             System.out.println(" 2. Polybius");
+            System.out.println(" 3. ROT(X)");
             System.out.println(" 4. Help");
             System.out.println(" 0. Exit");
             System.out.println("=====================================");
@@ -40,6 +49,9 @@ public class Menu {
                     case 2:
                         polybius.controlPoster();
                         break;
+                    case 3:
+                        rotX.controlPoster();
+                        break;
                     case 4:
                         Help help = new Help();
                         help.display();
@@ -57,5 +69,4 @@ public class Menu {
         }
         scanner.close();
     }
-
 }
