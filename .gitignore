@@ -31,3 +31,5 @@ bin/
 ### intelij ###
 .idea/*
 .idea
+.hashed_messages256
+.hashed_messages256/*
