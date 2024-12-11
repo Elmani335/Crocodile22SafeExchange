@@ -1,6 +1,5 @@
 package encryption;
 
-import java.io.File;
 import java.util.Scanner;
 import utils.FileHandler;
 
@@ -26,13 +25,14 @@ public abstract class MotherEncryption {
     public abstract String decipher(String messageEncryption, String key);
 
     /**
-     * 
+     * Interaction with the user using an encryption method
      */
     public void controlPoster(){
         
         Scanner scanner = new Scanner(System.in);
         boolean backToMainMenu = false;
-
+        
+        // Ask if it wants to encrypt or decrypt
         while (!backToMainMenu) {
             System.out.println("\n=====================================");
             System.out.println("           " + type +" MENU            ");
@@ -51,9 +51,11 @@ public abstract class MotherEncryption {
 
                 switch (choice) {
                     case 1:
+                        // Encryption
                         performEncryption();
                         break;
                     case 2:
+                        // Decryption
                         performDecryption();
                         break;
                     case 0:
@@ -69,7 +71,12 @@ public abstract class MotherEncryption {
 
     }
 
+    /**
+     * Encrypting a message
+     */
     private void performEncryption() {
+
+        // prompts user to enter message and key
         Scanner scanner = new Scanner(System.in);
         System.out.print("\nEnter the text to encrypt: ");
         String text = scanner.nextLine();
@@ -84,6 +91,7 @@ public abstract class MotherEncryption {
         String encrypted = encryption(text, key);
         System.out.println("Encrypted Message: " + encrypted);
 
+        // Ask the user if he wants to write the response to a file
         System.out.println("Do you want to write it to a");
         System.out.println(" 1. Yes");
         System.out.println(" 0. No");
@@ -95,8 +103,11 @@ public abstract class MotherEncryption {
             try {
                 choice = Integer.parseInt(response);
 
+                // Enables you to write to the file
                 switch (choice) {
                     case 1:
+
+                        // Write to file
                         FileHandler.writeToFile("./", "message", encrypted);
                         backToMainMenu = true;
                         break;
@@ -113,7 +124,7 @@ public abstract class MotherEncryption {
     }
 
     /**
-     * Demande à l'utilisateur à déchiffrer un message ou à un fichier
+     * Requests the user to decrypt a message or file
      */
     private void performDecryption() {
 
