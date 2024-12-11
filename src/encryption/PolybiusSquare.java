@@ -1,31 +1,28 @@
 package encryption;
 
-import java.util.Objects;
-
-public class PolybiusSquare {
-
-    String[][] scare;
-
-    public PolybiusSquare(){
-
-        // Initializing Polybius' square
-        this.scare = new String[][]{
+public class PolybiusSquare extends MotherEncryption{
+    
+    // Initializing Polybius' square
+    static String[][] scare = {    
+        
                 {"z",   "k",    "l",    "m",    "n"},
                 {"y",   "i/j",  "b",    "c",    "o"},
                 {"x",   "h",    "a",    "d",    "p"},
                 {"w",   "g",    "f",    "e",    "q"},
                 {"v",   "u",    "t",    "s",    "r"}
         };
-    }
 
     /**
      * Ciphers a message by changing the letters into numbers according to the nearest square.
-     * @param message : string, words to encrypt
-     * @return string: Encrypted words
+     * @param message : String, words to encrypt
+     * @param key : String, value null
+     * @return String: Encrypted words
      */
-    public String encryption(String message){
 
-        System.out.println("Message à chiffrer avec le scare de polybe: "+ message);
+    @Override
+    public String encryption(String message, String key){
+
+        System.out.println("Message to be encrypted with polybe scare: "+ message);
         StringBuilder result = new StringBuilder();
         String tmpLetter;
 
@@ -49,7 +46,7 @@ public class PolybiusSquare {
 
                         // If we find the letter in the square, we add the coordinates
                         if (tmpList[z].indexOf(tmpLetter) != -1) {
-                            //System.out.println("Letter trouvé: " + tmpLetter + ", position: " + y + "," + z);
+                            //System.out.println("Letter found: " + tmpLetter + ", position: " + y + "," + z);
                             result.append(y).append(z);
                             break;
                         }
@@ -64,11 +61,13 @@ public class PolybiusSquare {
     /**
      * Deciphers a message thanks to the double-dimensional board. Can receive spaces 
      * @param messageEncryption : String, message encrypted by the same array
+     * @param key : String, value null
      * @return : String, message decrypted with spaces
      */
-    public String decipher(String messageEncryption){
+    @Override
+    public String decipher(String messageEncryption, String key){
 
-        System.out.println("Message à déchiffrer: "+messageEncryption);
+        System.out.println("Message to decipher: "+messageEncryption);
         StringBuilder result = new StringBuilder();
         String[] partOfMessage = messageEncryption.split(" ");
         String x;
