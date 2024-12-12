@@ -8,9 +8,6 @@ public class RotXEncryption extends MotherEncryption {
         this.type = "ROT";
     }
 
-
- 
-
     @Override
     public String encryption(String message, String key) {
         return rotate(message, Integer.valueOf(key));
@@ -19,6 +16,11 @@ public class RotXEncryption extends MotherEncryption {
     @Override
     public String decipher(String message, String key) {
         return rotate(message, 26 - Integer.valueOf(key));
+    }
+
+    @Override
+    public Boolean checkInputUserKey(String key){
+        return !key.isEmpty() && key.matches("-?\\d+");
     }
 
     private String rotate(String text, int shift) {

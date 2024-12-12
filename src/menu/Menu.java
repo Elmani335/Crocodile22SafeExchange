@@ -1,6 +1,8 @@
 package menu;
 
 import java.util.Scanner;
+
+import encryption.Enigma;
 import encryption.MotherEncryption;
 import encryption.PolybiusSquare;
 import encryption.VigenereCipher;
@@ -13,6 +15,7 @@ public class Menu {
     MotherEncryption vigenere;
     MotherEncryption rotX;
     private Random rand;
+    MotherEncryption enigma;
 
     public Menu() {
         // Initialize encryptions
@@ -20,6 +23,7 @@ public class Menu {
         vigenere = new VigenereCipher();
         rotX = new RotXEncryption();
         rand = new Random();
+        enigma = new Enigma();
     }
 
     public void display() {
@@ -33,7 +37,8 @@ public class Menu {
             System.out.println(" 1. Vigenère");
             System.out.println(" 2. Polybius");
             System.out.println(" 3. ROT(X)");
-            System.out.println(" 4. Help");
+            System.out.println(" 4. Enigma");
+            System.out.println(" 5. Help");
             System.out.println(" 0. Exit");
             System.out.println("=====================================");
             System.out.print("Select an option: ");
@@ -55,6 +60,9 @@ public class Menu {
                         rotX.controlPoster();
                         break;
                     case 4:
+                        enigma.controlPoster();
+                        break;
+                    case 5:
                         Help help = new Help();
                         help.display();
                         break;
