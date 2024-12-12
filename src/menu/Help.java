@@ -53,6 +53,7 @@ public class Help {
                 System.out.println("\nInvalid input, please enter a number.");
             }
         }
+        scanner.close();
     }
 
     private void displayEncryptionHelp() {
@@ -99,5 +100,6 @@ public class Help {
         System.out.println("\nPress Enter to return to the Help Menu...");
         Scanner scanner = new Scanner(System.in);
         scanner.nextLine();
+        scanner.close();
     }
 }
