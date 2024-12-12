@@ -1,7 +1,7 @@
 package menu;
 
 import java.util.Scanner;
-
+import random.PseudoRandomGenerator;
 import encryption.Enigma;
 import encryption.MotherEncryption;
 import encryption.PolybiusSquare;
@@ -12,6 +12,7 @@ import hashing.SHA256Hash;
 import encryption.RotXEncryption;
 
 import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
 import java.util.Random;
 import utils.LoadingAudio;
 
@@ -49,7 +50,8 @@ public class Menu {
             System.out.println(" 4. Enigma");
             System.out.println(" 5. MD5 ");
             System.out.println(" 6. SHA256 ");
-            System.out.println(" 7. Help");
+            System.out.println(" 7. Generate Pseudo Random Number");
+            System.out.println(" 8. Help");
             System.out.println(" 0. Exit");
             System.out.println("=====================================");
             System.out.print("Select an option: ");
@@ -80,6 +82,19 @@ public class Menu {
                         sha256.controlPoster();
                         break;
                     case 7:
+                        System.out.print("Enter the seed for LFSR (UTF-8 characters): ");
+                        String seed = scanner.nextLine().trim();
+
+                        // Use system time as seed if no seed is given
+                        if (seed.isEmpty()) {
+                            seed = String.valueOf(Instant.now().toEpochMilli());
+                            System.out.println("No seed provided, using internal method: " + seed);
+                        }
+
+                        PseudoRandomGenerator prg = new PseudoRandomGenerator(seed);
+                        prg.runLFSR(); // This runs the LFSR and prints the generated numbers
+                        break;
+                    case 8:
                         Help help = new Help();
                         help.display();
                         break;
