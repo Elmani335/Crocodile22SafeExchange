@@ -3,7 +3,6 @@ package encryption;
 import java.util.Scanner;
 import utils.FileHandler;
 
-
 public abstract class MotherEncryption {
 
     // Encryption type
@@ -11,33 +10,35 @@ public abstract class MotherEncryption {
 
     /**
      * Encrypts a message according to a key
+     *
      * @param message : String, words to encrypt
-     * @param key : String, key used to encrypt
+     * @param key     : String, key used to encrypt
      * @return String : Ciphered words
      */
     public abstract String encryption(String message, String key);
 
     /**
-     * Decript the message according to a key
+     * Decrypts the message according to a key
+     *
      * @param messageEncryption : String, message encrypted
-     * @param key : String, the same key that was used for encryption
+     * @param key               : String, the same key that was used for encryption
      */
     public abstract String decipher(String messageEncryption, String key);
 
     /**
-     * As long as the message does not respect the criteria
-     * Checks a String to see if it matches the criteria
-     * Must be composed of letters only
+     * As long as the message does not respect the criteria Checks a String to see if it matches
+     * the criteria Must be composed of letters only
+     *
      * @param message : String, message to check
      * @return : Boolean, true if it matches, false if it doesn't
      */
-    public Boolean checkInputUserMessage(String message){
+    public Boolean checkInputUserMessage(String message) {
         return !message.isEmpty() && message.matches("[a-z]+");
     }
 
     /**
-     * Verifies the key entered by the user. 
-     * Each child class has its own verification manners
+     * Verifies the key entered by the user. Each child class has its own verification manners
+     *
      * @param key : String, key to check
      * @return : Boolean, true if it meets criteria, false otherwise
      */
@@ -46,15 +47,13 @@ public abstract class MotherEncryption {
     /**
      * Interaction with the user using an encryption method
      */
-    public void controlPoster(){
-        
-        Scanner scanner = new Scanner(System.in);
+    public void controlPoster(Scanner scanner) {
         boolean backToMainMenu = false;
-        
+
         // Ask if it wants to encrypt or decrypt
         while (!backToMainMenu) {
             System.out.println("\n=====================================");
-            System.out.println("           " + type +" MENU            ");
+            System.out.println("           " + type + " MENU            ");
             System.out.println("=====================================");
             System.out.println(" 1. Encrypt");
             System.out.println(" 2. Decrypt");
@@ -64,69 +63,64 @@ public abstract class MotherEncryption {
 
             String input = scanner.nextLine();
             int choice;
-            
+
             try {
                 choice = Integer.parseInt(input);
 
                 switch (choice) {
                     case 1:
                         // Encryption
-                        performEncryption();
+                        performEncryption(scanner);
                         break;
                     case 2:
                         // Decryption
-                        performDecryption();
+                        performDecryption(scanner);
                         break;
                     case 0:
                         backToMainMenu = true;
                         break;
                     default:
-                        System.out.println("\nInvalid option, please choose a valid number.");
+                        System.out.println("\nInvalid option, please choose a valid number from the list.");
                 }
             } catch (NumberFormatException e) {
                 System.out.println("\nInvalid input, please enter a number.");
             }
         }
-        scanner.close();
-
     }
 
     /**
      * Encrypting a message
      */
-    private void performEncryption() {
-
+    private void performEncryption(Scanner scanner) {
         // prompts user to enter message and key
-        Scanner scanner = new Scanner(System.in);
         String text = getMessage(scanner);
         String key = getKey(scanner);
-
+    
         String encrypted = encryption(text, key);
         System.out.println("Encrypted Message: " + encrypted);
-
+    
         // Ask the user if he wants to write the response to a file
-        System.out.println("Do you want to write it to a");
+        System.out.println("Do you want to write it to a file?");
         System.out.println(" 1. Yes");
         System.out.println(" 0. No");
-
-        String response = scanner.nextLine();
-        int choice;
+    
         boolean backToMainMenu = false;
         while (!backToMainMenu) {
+            String response = scanner.nextLine().trim();
+            int choice;
             try {
                 choice = Integer.parseInt(response);
-
+    
                 // Enables you to write to the file
                 switch (choice) {
                     case 1:
-
                         // Write to file
                         FileHandler.writeToFile("./", "message", encrypted);
-                        System.out.println("Message write: "+encrypted);
+                        System.out.println("Message written: " + encrypted);
                         backToMainMenu = true;
                         break;
                     case 0:
-                        System.out.println("Message encrypted: "+encrypted);
+                        System.out.println("Message encrypted: " + encrypted);
                         backToMainMenu = true;
                         break;
                     default:
@@ -141,23 +135,21 @@ public abstract class MotherEncryption {
     /**
      * Requests the user to decrypt a message or file
      */
-    private void performDecryption() {
-
-        // First request to know if it's reading or decrypting a variable
-        Scanner scanner = new Scanner(System.in);
-        int choice;
+    private void performDecryption(Scanner scanner) {
         boolean backToMainMenu = false;
-        System.out.println("Do you want to read a file?");
-        System.out.println(" 1. Yes");
-        System.out.println(" 0. No");
-        String response = scanner.nextLine();
-
+    
         while (!backToMainMenu) {
+            System.out.println("Do you want to read a file?");
+            System.out.println(" 1. Yes");
+            System.out.println(" 0. No");
+            
+            String response = scanner.nextLine().trim(); 
+            int choice;
+    
             try {
                 choice = Integer.parseInt(response);
-                
+    
                 switch (choice) {
-
                     // Play a file
                     case 1:
                         System.out.print("Read...");
@@ -167,23 +159,22 @@ public abstract class MotherEncryption {
                         System.out.print(resultFile);
                         backToMainMenu = true;
                         break;
-
+    
                     // Decrypt a message
                     case 0:
-
                         // Message retrieval
                         System.out.print("\nEnter the text to decrypt: ");
                         String text = getMessage(scanner);
-
+    
                         // Key recovery
                         System.out.print("Enter the decryption key: ");
                         key = getKey(scanner);
-                        
+    
                         if (text.isEmpty() || key.isEmpty()) {
                             System.out.println("Text and key cannot be empty.");
-                            return;
+                            break;
                         }
-                        
+    
                         // Message decryption
                         String decrypted = decipher(text, key);
                         System.out.println("Decrypted Message: " + decrypted);
@@ -196,15 +187,15 @@ public abstract class MotherEncryption {
                 System.out.println("\nInvalid input, please enter a number.");
             }
         }
-
     }
 
     /**
      * Retrieves and checks the message to be encrypted or decrypted if it matches certain criteria.
-     * @param scanner : Scaner, instance of a scanner object
+     *
+     * @param scanner : Scanner, instance of a scanner object
      * @return : String, the message to be encrypted or decrypted
      */
-    public String getMessage(Scanner scanner){
+    public String getMessage(Scanner scanner) {
         Boolean tmpMessageIsGood = false;
         String text = "";
 
@@ -212,9 +203,9 @@ public abstract class MotherEncryption {
         while (!tmpMessageIsGood) {
             System.out.print("\nEnter the text to encrypt: ");
             text = scanner.nextLine();
-            if (checkInputUserMessage(text)){
+            if (checkInputUserMessage(text)) {
                 tmpMessageIsGood = true;
-            }else{
+            } else {
                 System.out.println("Error, please enter a message containing lowercase letters only");
             }
         }
@@ -223,10 +214,11 @@ public abstract class MotherEncryption {
 
     /**
      * Retrieval and verification of the key entered by the user
-     * @param scanner : Scaner, instance of a scanner object
+     *
+     * @param scanner : Scanner, instance of a scanner object
      * @return : String, the key entered by the user corresponding to the criterion
      */
-    public String getKey(Scanner scanner){
+    public String getKey(Scanner scanner) {
         Boolean tmpKeyIsGood = false;
         String key = "";
         while (!tmpKeyIsGood) {
@@ -234,13 +226,12 @@ public abstract class MotherEncryption {
             key = scanner.nextLine();
 
             // Calls the verification method specific to each child class
-            if (checkInputUserKey(key)){
+            if (checkInputUserKey(key)) {
                 tmpKeyIsGood = true;
-            }else{
+            } else {
                 System.out.println("Error, please enter a valid key");
             }
         }
         return key;
     }
-
 }
