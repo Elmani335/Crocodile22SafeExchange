@@ -12,7 +12,6 @@ public class SHA256Hash {
     
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        String globalMessage = "";
         File folder = createFolder(FOLDER_PATH);
 
         if (folder == null) scanner.close();
@@ -40,7 +39,7 @@ public class SHA256Hash {
                     break;
 
                 case 3:
-                    file = handleAddMessage(scanner, globalMessage, file);
+                    file = handleAddMessage(scanner, file);
                     break;
 
                 case 4:
@@ -74,37 +73,36 @@ public class SHA256Hash {
         System.out.println("\n--- SHA-256 Hash Calculator ---");
         System.out.println("1. Create a new file");
         System.out.println("2. Select an existing file");
-        System.out.println("3. Add a message and update the hash");
+        System.out.println("3. Add a message");
         System.out.println("4. Compare hashes of two files");
         System.out.println("5. Exit");
         System.out.print("Choose an option: ");
     }
 
     // Handle adding a message to the file and updating the hash
-    private static File handleAddMessage(Scanner scanner, String globalMessage, File file) {
-        if (file == null) {
-            System.out.println("No file selected. Please create or select a file first.");
-            return null;
-        }
-
-        System.out.print("Enter the message to add: ");
-        String message = scanner.nextLine();
-        globalMessage += message;
-
-        try {
-            // Calculate and print updated hash
-            String hash = calculateSHA256(globalMessage);
-            System.out.println("\nUpdated SHA-256 Hash: " + hash);
-
-            // Save the updated hash to the selected file
-            String result = FileHandler.writeToFileHash(file, hash);
-            System.out.println(result);
-        } catch (NoSuchAlgorithmException e) {
-            System.out.println("Error calculating hash: " + e.getMessage());
-        }
-
-        return file;
+    private static File handleAddMessage(Scanner scanner, File file) {
+    if (file == null) {
+        System.out.println("No file selected. Please create or select a file first.");
+        return null;
     }
+
+    System.out.print("Enter the message to add: ");
+    String message = scanner.nextLine();
+
+    try {
+        // Calculer et afficher le hash
+        String hash = calculateSHA256(message);
+        System.out.println("\nSHA-256 Hash: " + hash);
+
+        // Sauvegarder le hash dans le fichier
+        String result = FileHandler.writeToFileHash(file, hash);
+        System.out.println(result);
+    } catch (NoSuchAlgorithmException e) {
+        System.out.println("Error calculating hash: " + e.getMessage());
+    }
+
+    return file;
+}
 
     // Method to calculate the SHA-256 hash
     public static String calculateSHA256(String message) throws NoSuchAlgorithmException {

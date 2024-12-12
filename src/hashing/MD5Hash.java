@@ -11,8 +11,6 @@ public class MD5Hash {
     private static final String FOLDER_PATH = "hashed_messages_md5/";
     private static final String EXIT_MESSAGE = "Goodbye!";
     private static File selectedFile = null;
-    private static String globalMessage = "";
-
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -67,7 +65,7 @@ public class MD5Hash {
         System.out.println("\n--- MD5 Hash Calculator ---");
         System.out.println("1. Create a new file");
         System.out.println("2. Select an existing file");
-        System.out.println("3. Add a message and update the hash");
+        System.out.println("3. Add a message");
         System.out.println("4. Compare hashes of two files");
         System.out.println("5. Exit");
         System.out.print("Choose an option: ");
@@ -84,22 +82,19 @@ public class MD5Hash {
             System.out.println("No file selected. Please create or select a file first.");
             return;
         }
-
+    
         System.out.print("Enter the message to add: ");
         String message = scanner.nextLine();
         
         try {
-            // Append the new message to the global message
-            globalMessage += message;
-
-            // Calculate the updated hash
-            String hash = calculateMD5(globalMessage);
-            System.out.println("\nUpdated MD5 Hash: " + hash);
-
-            // Save the updated hash to the selected file
+            // Calculer le hash du message exactement tel qu'il est entré
+            String hash = calculateMD5(message);
+            System.out.println("\nMD5 Hash: " + hash);
+    
+            // Sauvegarder le hash dans le fichier
             String result = FileHandler.writeToFileHash(selectedFile, hash);
             System.out.println(result);
-
+    
         } catch (NoSuchAlgorithmException e) {
             System.out.println("Error calculating hash: " + e.getMessage());
         }
