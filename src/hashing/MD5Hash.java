@@ -87,11 +87,11 @@ public class MD5Hash {
         String message = scanner.nextLine();
         
         try {
-            // Calculer le hash du message exactement tel qu'il est entré
+            // Calculate the hash of the message
             String hash = calculateMD5(message);
             System.out.println("\nMD5 Hash: " + hash);
     
-            // Sauvegarder le hash dans le fichier
+            //Save hash to file
             String result = FileHandler.writeToFileHash(selectedFile, hash);
             System.out.println(result);
     

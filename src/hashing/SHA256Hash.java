@@ -90,11 +90,11 @@ public class SHA256Hash {
     String message = scanner.nextLine();
 
     try {
-        // Calculer et afficher le hash
+        // Calculate and display the hash
         String hash = calculateSHA256(message);
         System.out.println("\nSHA-256 Hash: " + hash);
 
-        // Sauvegarder le hash dans le fichier
+        //Save hash to file
         String result = FileHandler.writeToFileHash(file, hash);
         System.out.println(result);
     } catch (NoSuchAlgorithmException e) {
