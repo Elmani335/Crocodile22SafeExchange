@@ -1,7 +1,5 @@
 package encryption;
 
-import java.util.Scanner;
-
 public class VigenereCipher extends MotherEncryption{
 
     public VigenereCipher(){

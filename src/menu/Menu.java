@@ -6,7 +6,12 @@ import encryption.Enigma;
 import encryption.MotherEncryption;
 import encryption.PolybiusSquare;
 import encryption.VigenereCipher;
+import hashing.MD5Hash;
+import hashing.MotherHash;
+import hashing.SHA256Hash;
 import encryption.RotXEncryption;
+
+import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 import utils.LoadingAudio;
 
@@ -16,6 +21,8 @@ public class Menu {
     MotherEncryption rotX;
     private Random rand;
     MotherEncryption enigma;
+    MotherHash md5;
+    MotherHash sha256;
 
     public Menu() {
         // Initialize encryptions
@@ -24,9 +31,11 @@ public class Menu {
         rotX = new RotXEncryption();
         rand = new Random();
         enigma = new Enigma();
+        md5 = new MD5Hash();
+        sha256 = new SHA256Hash();
     }
 
-    public void display() {
+    public void display() throws NoSuchAlgorithmException {
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
 
@@ -38,7 +47,9 @@ public class Menu {
             System.out.println(" 2. Polybius");
             System.out.println(" 3. ROT(X)");
             System.out.println(" 4. Enigma");
-            System.out.println(" 5. Help");
+            System.out.println(" 5. MD5 ");
+            System.out.println(" 6. SHA256 ");
+            System.out.println(" 7. Help");
             System.out.println(" 0. Exit");
             System.out.println("=====================================");
             System.out.print("Select an option: ");
@@ -63,6 +74,12 @@ public class Menu {
                         enigma.controlPoster();
                         break;
                     case 5:
+                        md5.controlPoster();
+                        break;
+                    case 6:
+                        sha256.controlPoster();
+                        break;
+                    case 7:
                         Help help = new Help();
                         help.display();
                         break;
