@@ -64,4 +64,9 @@ public class VigenereCipher extends MotherEncryption{
         return result.toString();
     }
 
+    @Override
+    public Boolean checkInputUserKey(String key){
+        return !key.isEmpty();
+    }
+
 }

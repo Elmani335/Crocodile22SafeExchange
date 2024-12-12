@@ -102,4 +102,9 @@ public class PolybiusSquare extends MotherEncryption{
         return result.toString();
     }
 
+    @Override
+    public Boolean checkInputUserKey(String key){
+        return true;
+    }
+
 }
