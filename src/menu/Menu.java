@@ -80,13 +80,7 @@ public class Menu {
                         System.out.println("\nInvalid option, please choose a valid number.");
                 }
             } catch (NumberFormatException e) {
-                // If the input is not a number, check for a secret string
-                if (input.equalsIgnoreCase("konami")) {
-                    System.out.println("\n🕹️ You've discovered the Konami code! 🕹️");
-                    System.out.println("Special bonus unlocked!");
-                } else {
-                    System.out.println("\nInvalid input, please enter a number.");
-                }
+                System.out.println("\nInvalid input, please enter a number.");
             }
         }
         scanner.close();
