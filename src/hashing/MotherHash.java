@@ -4,9 +4,7 @@ import java.io.File;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-
+import menu.Menu;
 import utils.FileHandler;
 
 public abstract class MotherHash {
@@ -14,7 +12,6 @@ public abstract class MotherHash {
     String FOLDER_PATH;
     File selectedFile = null;
     String type;
-    String SECRET_SALT = "";
     String SECRET_PEPPER = "pepper";
 
     /**
@@ -133,7 +130,7 @@ public abstract class MotherHash {
             String secretKey = scanner.nextLine();  // Get the secret key from the user
     
             // Calculate HMAC with the secret key
-            resultHash = calculateHMAC(message, SECRET_SALT, SECRET_PEPPER, secretKey);
+            resultHash = calculateHMAC(message, Menu.user.getSalt(), SECRET_PEPPER, secretKey);
             System.out.println("\nHMAC Hash with Salt + Pepper: " + resultHash);
         } else {
             // Calculate a regular hash

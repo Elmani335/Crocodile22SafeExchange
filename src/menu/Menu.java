@@ -65,10 +65,6 @@ public class Menu {
                     case 2:
                         user = listUser[1];
                         break;
-                    case 3:
-                        Help help = new Help();
-                        help.display(scanner); 
-                        break;
                     default:
                         System.out.println("\nInvalid option, please choose a valid number from the list 2.");
                 }
@@ -164,7 +160,6 @@ public class Menu {
         for (int i=0;i<listUser.length;i++){
             System.out.println(" "+(i+1)+". "+listUser[i].name);
         }
-        System.out.println(" 3. Help");
         System.out.println("=====================================");
         System.out.print("Select an option: ");
     }
