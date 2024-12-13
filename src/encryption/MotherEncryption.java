@@ -6,7 +6,7 @@ import utils.FileHandler;
 public abstract class MotherEncryption {
 
     // Encryption type
-    String type;
+    protected String type;
 
     /**
      * Encrypts a message according to a key
