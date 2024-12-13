@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException;
 public class MD5Hash extends MotherHash {
 
     public MD5Hash() {
-        this.FOLDER_PATH = "hashed_messages_md5/";
+        this.FOLDER_PATH = "hashed_messages_MD5/";
         this.type = "md5";
     }
 

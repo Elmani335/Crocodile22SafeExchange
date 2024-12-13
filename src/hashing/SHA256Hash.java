@@ -7,7 +7,7 @@ public class SHA256Hash extends MotherHash {
 
     public SHA256Hash() {
         this.type = "SHA256";
-        this.FOLDER_PATH = "hashed_messages256/";
+        this.FOLDER_PATH = "hashed_messages_256/";
     }
 
     /**
