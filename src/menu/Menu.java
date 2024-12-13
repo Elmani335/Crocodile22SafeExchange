@@ -16,7 +16,6 @@ import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.util.Random;
 import utils.LoadingAudio;
-import steganography.Steganography;
 import java.io.IOException;
 
 
@@ -74,10 +73,10 @@ public class Menu {
                         rc4.controlPoster(scanner); 
                         break;
                     case 6:
-                        handleHashing(md5);
+                        md5.controlPoster();;
                         break;
                     case 7:
-                        handleHashing(sha256);
+                        sha256.controlPoster();
                         break;
                     case 8:
                         handleRandomNumberGeneration(scanner);
@@ -128,11 +127,6 @@ public class Menu {
         System.out.println("=====================================");
         System.out.print("Select an option: ");
 
-    }
-
-
-    private void handleHashing(MotherHash hash) {
-        System.out.println("Hashing functionality is not implemented yet.");
     }
 
     private void handleRandomNumberGeneration(Scanner scanner) {
