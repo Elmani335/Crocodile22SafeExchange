@@ -73,7 +73,7 @@ public class Menu {
                         rc4.controlPoster(scanner); 
                         break;
                     case 6:
-                        md5.controlPoster();;
+                        md5.controlPoster();
                         break;
                     case 7:
                         sha256.controlPoster();
