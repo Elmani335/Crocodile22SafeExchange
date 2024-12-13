@@ -5,6 +5,7 @@ import random.PseudoRandomGenerator;
 import encryption.Enigma;
 import encryption.MotherEncryption;
 import encryption.PolybiusSquare;
+import encryption.RC4Method;
 import encryption.VigenereCipher;
 import hashing.MD5Hash;
 import hashing.MotherHash;
@@ -23,6 +24,7 @@ public class Menu {
     private MotherHash md5;
     private MotherHash sha256;
     private Random rand;
+    private MotherEncryption rc4;
 
     public Menu() {
         polybius = new PolybiusSquare();
@@ -32,6 +34,7 @@ public class Menu {
         md5 = new MD5Hash();
         sha256 = new SHA256Hash();
         rand = new Random();
+        rc4 = new RC4Method();
     }
 
     public void display(Scanner scanner) throws NoSuchAlgorithmException {
@@ -47,29 +50,32 @@ public class Menu {
 
                 switch (choice) {
                     case 1:
-                        vigenere.controlPoster(scanner); // Pass scanner here
+                        vigenere.controlPoster(scanner); 
                         break;
                     case 2:
-                        polybius.controlPoster(scanner); // Pass scanner here
+                        polybius.controlPoster(scanner); 
                         break;
                     case 3:
-                        rotX.controlPoster(scanner); // Pass scanner here
+                        rotX.controlPoster(scanner); 
                         break;
                     case 4:
-                        enigma.controlPoster(scanner); // Pass scanner here
+                        enigma.controlPoster(scanner); 
                         break;
                     case 5:
-                        handleHashing(md5); // Add a method to handle hashing without Scanner
+                        rc4.controlPoster(scanner); 
                         break;
                     case 6:
-                        handleHashing(sha256); // Add a method to handle hashing without Scanner
+                        handleHashing(md5);
                         break;
                     case 7:
-                        handleRandomNumberGeneration(scanner);
+                        handleHashing(sha256);
                         break;
                     case 8:
+                        handleRandomNumberGeneration(scanner);
+                        break;
+                    case 9:
                         Help help = new Help();
-                        help.display(scanner); // Pass the scanner to Help
+                        help.display(scanner); 
                         break;
                     case 0:
                         exit = true;
@@ -99,10 +105,11 @@ public class Menu {
         System.out.println(" 2. Polybius");
         System.out.println(" 3. ROT(X)");
         System.out.println(" 4. Enigma");
-        System.out.println(" 5. MD5 ");
-        System.out.println(" 6. SHA256 ");
-        System.out.println(" 7. Generate Pseudo Random Number");
-        System.out.println(" 8. Help");
+        System.out.println(" 5. RC4");
+        System.out.println(" 6. MD5 ");
+        System.out.println(" 7. SHA256 ");
+        System.out.println(" 8. Generate Pseudo Random Number");
+        System.out.println(" 9. Help");
         System.out.println(" 0. Exit");
         System.out.println("=====================================");
         System.out.print("Select an option: ");

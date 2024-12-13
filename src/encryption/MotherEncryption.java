@@ -50,7 +50,6 @@ public abstract class MotherEncryption {
     public void controlPoster(Scanner scanner) {
         boolean backToMainMenu = false;
 
-        // Ask if it wants to encrypt or decrypt
         while (!backToMainMenu) {
             System.out.println("\n=====================================");
             System.out.println("           " + type + " MENU            ");
@@ -69,11 +68,9 @@ public abstract class MotherEncryption {
 
                 switch (choice) {
                     case 1:
-                        // Encryption
                         performEncryption(scanner);
                         break;
                     case 2:
-                        // Decryption
                         performDecryption(scanner);
                         break;
                     case 0:
@@ -88,33 +85,24 @@ public abstract class MotherEncryption {
         }
     }
 
-    /**
-     * Encrypting a message
-     */
     private void performEncryption(Scanner scanner) {
-        // prompts user to enter message and key
-        String text = getMessage(scanner);
+        String text = getMessage(scanner, true); // Correct context for encryption
         String key = getKey(scanner);
-    
+
         String encrypted = encryption(text, key);
         System.out.println("Encrypted Message: " + encrypted);
-    
-        // Ask the user if he wants to write the response to a file
+
         System.out.println("Do you want to write it to a file?");
         System.out.println(" 1. Yes");
         System.out.println(" 0. No");
-    
+
         boolean backToMainMenu = false;
         while (!backToMainMenu) {
             String response = scanner.nextLine().trim();
-            int choice;
             try {
-                choice = Integer.parseInt(response);
-    
-                // Enables you to write to the file
+                int choice = Integer.parseInt(response);
                 switch (choice) {
                     case 1:
-                        // Write to file
                         FileHandler.writeToFile("./", "message", encrypted);
                         System.out.println("Message written: " + encrypted);
                         backToMainMenu = true;
@@ -132,54 +120,45 @@ public abstract class MotherEncryption {
         }
     }
 
-    /**
-     * Requests the user to decrypt a message or file
-     */
     private void performDecryption(Scanner scanner) {
         boolean backToMainMenu = false;
-    
+
+        System.out.println("Do you want to read a file?");
+        System.out.println(" 1. Yes");
+        System.out.println(" 0. No");
+
         while (!backToMainMenu) {
-            System.out.println("Do you want to read a file?");
-            System.out.println(" 1. Yes");
-            System.out.println(" 0. No");
-            
-            String response = scanner.nextLine().trim(); 
-            int choice;
-    
+            String response = scanner.nextLine().trim();
             try {
-                choice = Integer.parseInt(response);
-    
+                int choice = Integer.parseInt(response);
+
                 switch (choice) {
-                    // Play a file
                     case 1:
-                        System.out.print("Read...");
                         System.out.print("Enter the decryption key: ");
-                        String key = getKey(scanner);
-                        String resultFile = FileHandler.ReadFile("./message.txt", this, key);
-                        System.out.print(resultFile);
-                        backToMainMenu = true;
-                        break;
-    
-                    // Decrypt a message
-                    case 0:
-                        // Message retrieval
-                        System.out.print("\nEnter the text to decrypt: ");
-                        String text = getMessage(scanner);
-    
-                        // Key recovery
-                        System.out.print("Enter the decryption key: ");
-                        key = getKey(scanner);
-    
-                        if (text.isEmpty() || key.isEmpty()) {
-                            System.out.println("Text and key cannot be empty.");
-                            break;
+                        String fileKey = getKey(scanner);
+                        String resultFile = FileHandler.ReadFile("./message.txt", this, fileKey);
+
+                        if (resultFile != null && !resultFile.isEmpty()) {
+                            System.out.println("Decrypted Message: " + resultFile);
+                        } else {
+                            System.out.println("Failed to read or decode the file.");
                         }
-    
-                        // Message decryption
-                        String decrypted = decipher(text, key);
-                        System.out.println("Decrypted Message: " + decrypted);
                         backToMainMenu = true;
                         break;
+
+                    case 0:
+                        String text = getMessage(scanner, false); // Correct context for decryption
+                        String key = getKey(scanner);
+
+                        if (!text.isEmpty() && !key.isEmpty()) {
+                            String decrypted = decipher(text, key);
+                            System.out.println("Decrypted Message: " + decrypted);
+                        } else {
+                            System.out.println("Text and key cannot be empty.");
+                        }
+                        backToMainMenu = true;
+                        break;
+
                     default:
                         System.out.println("\nInvalid option, please choose a valid number.");
                 }
@@ -189,43 +168,53 @@ public abstract class MotherEncryption {
         }
     }
 
-    /**
-     * Retrieves and checks the message to be encrypted or decrypted if it matches certain criteria.
-     *
-     * @param scanner : Scanner, instance of a scanner object
-     * @return : String, the message to be encrypted or decrypted
-     */
-    public String getMessage(Scanner scanner) {
+    public String getMessage(Scanner scanner, boolean isEncrypting) {
         Boolean tmpMessageIsGood = false;
         String text = "";
-
-        // As long as the message does not meet the criteria
+    
         while (!tmpMessageIsGood) {
-            System.out.print("\nEnter the text to encrypt: ");
-            text = scanner.nextLine();
-            if (checkInputUserMessage(text)) {
-                tmpMessageIsGood = true;
+            if (isEncrypting) {
+                System.out.print("\nEnter the text to encrypt: ");
+            } else if (type.equalsIgnoreCase("RC4")) {
+                System.out.print("\nEnter the base64 encoded text to decrypt: ");
             } else {
-                System.out.println("Error, please enter a message containing lowercase letters only");
+                System.out.print("\nEnter the text to decrypt: ");
+            }
+    
+            text = scanner.nextLine();
+    
+            if (isEncrypting) {
+                if (checkInputUserMessage(text)) {
+                    tmpMessageIsGood = true;
+                } else {
+                    System.out.println("Error, please enter a message containing lowercase letters only.");
+                }
+            } else {
+                if (type.equalsIgnoreCase("RC4")) {
+                    if (!text.isEmpty()) {
+                        tmpMessageIsGood = true;
+                    } else {
+                        System.out.println("Error, please enter a valid base64 encoded message.");
+                    }
+                } else {
+                    if (checkInputUserMessage(text)) {
+                        tmpMessageIsGood = true;
+                    } else {
+                        System.out.println("Error, please enter a message containing lowercase letters only.");
+                    }
+                } 
             }
         }
         return text;
     }
 
-    /**
-     * Retrieval and verification of the key entered by the user
-     *
-     * @param scanner : Scanner, instance of a scanner object
-     * @return : String, the key entered by the user corresponding to the criterion
-     */
     public String getKey(Scanner scanner) {
         Boolean tmpKeyIsGood = false;
         String key = "";
         while (!tmpKeyIsGood) {
-            System.out.print("\nEnter the encryption key: ");
+            System.out.print("\nEnter the encryption/decryption key: ");
             key = scanner.nextLine();
 
-            // Calls the verification method specific to each child class
             if (checkInputUserKey(key)) {
                 tmpKeyIsGood = true;
             } else {
