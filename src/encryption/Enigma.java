@@ -22,6 +22,23 @@ public class Enigma extends MotherEncryption {
         return encryptionOrDecipher(message, keys,false);
     }
 
+    @Override
+    public Boolean checkInputUserMessageToDecryption(String message){
+        return checkInputUserMessageToEncryption(message);
+    }
+    
+    /**
+     * Checks that the user has entered only lower-case letters
+    */
+    @Override
+    public Boolean checkInputUserMessageToEncryption(String message){
+        if (!message.matches(".*[a-z].*")){
+            System.out.println("Please enter only lower-case letters");
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Check that the key has the same number of letters as rotors.    
     */

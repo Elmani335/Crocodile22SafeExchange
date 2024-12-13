@@ -1,17 +1,18 @@
 package encryption;
 
-public class PolybiusSquare extends MotherEncryption {
+public class PolybiusSquare extends MotherEncryption{
+    
+    // Initializing Polybius' square
+    static String[][] scare = {    
+        
+                {"z",   "k",    "l",    "m",    "n"},
+                {"y",   "i/j",  "b",    "c",    "o"},
+                {"x",   "h",    "a",    "d",    "p"},
+                {"w",   "g",    "f",    "e",    "q"},
+                {"v",   "u",    "t",    "s",    "r"}
+        };
 
-    // Initialize Polybius' square
-    static String[][] scare = {
-        {"z", "k", "l", "m", "n"},
-        {"y", "i/j", "b", "c", "o"},
-        {"x", "h", "a", "d", "p"},
-        {"w", "g", "f", "e", "q"},
-        {"v", "u", "t", "s", "r"}
-    };
-
-    public PolybiusSquare() {
+    public PolybiusSquare(){
         this.type = "Polybius";
     }
 
@@ -21,68 +22,103 @@ public class PolybiusSquare extends MotherEncryption {
      * @param key : String, value null
      * @return String: Encrypted words
      */
+
     @Override
-    public String encryption(String message, String key) {
-        System.out.println("Message to be encrypted with polybe scare: " + message);
+    public String encryption(String message, String key){
+
+        System.out.println("Message to be encrypted with polybe scare: "+ message);
         StringBuilder result = new StringBuilder();
         String tmpLetter;
 
         // Message letter browsing
-        for (int i = 0; i < message.length(); i++) {
+        for (int i=0; i<message.length();i++){
+
             tmpLetter = String.valueOf(message.charAt(i));
 
-            if (tmpLetter.equals(" ")) {
+            if (tmpLetter.equals(" ")){
+                // Keep the space
                 result.append(" ");
-            } else {
-                boolean found = false; // Flag to exit loops once found
-                for (int y = 0; y < scare.length && !found; y++) {
-                    for (int z = 0; z < scare[y].length; z++) {
-                        if (scare[y][z].indexOf(tmpLetter) != -1) {
+            }else {
+
+                String[] tmpList;
+                // Square course
+                for (int y = 0; y < scare.length; y++) {
+                    tmpList = scare[y];
+
+                    // Browse square sub-lists
+                    for (int z = 0; z < tmpList.length; z++) {
+
+                        // If we find the letter in the square, we add the coordinates
+                        if (tmpList[z].indexOf(tmpLetter) != -1) {
+                            //System.out.println("Letter found: " + tmpLetter + ", position: " + y + "," + z);
                             result.append(y).append(z);
-                            found = true; // Exit loops once the letter is found
                             break;
                         }
                     }
                 }
             }
+
         }
         return result.toString();
     }
 
     /**
-     * Deciphers a message thanks to the double-dimensional board. Can receive spaces.
+     * Deciphers a message thanks to the double-dimensional board. Can receive spaces 
      * @param messageEncryption : String, message encrypted by the same array
      * @param key : String, value null
      * @return : String, message decrypted with spaces
      */
     @Override
-    public String decipher(String messageEncryption, String key) {
-        System.out.println("Message to decipher: " + messageEncryption);
+    public String decipher(String messageEncryption, String key){
+
+        System.out.println("Message to decipher: "+messageEncryption);
         StringBuilder result = new StringBuilder();
         String[] partOfMessage = messageEncryption.split(" ");
+        String x;
+        String y;
 
-        for (String travelNumber : partOfMessage) {
-            if (travelNumber.length() % 2 != 0) {
-                System.out.println("Warning: Incorrect length, ignoring last character.");
-                travelNumber = travelNumber.substring(0, travelNumber.length() - 1); // Trim the last character
+        // Separate the message between each line break
+        // We then go through the strings two by two to retrieve the x and y indexes
+        // These will be used to retrieve a string from the double-dimensional array
+
+        for (String travelNumber : partOfMessage){
+
+            for (int i=0;i<travelNumber.length();i+=2){
+
+                // Directly retrieving the variable travelNumber.charAt(i) as an int does not retrieve the correct value
+                // To avoid a change when retrieving the char, we store the value in a string, which will be caster as an int
+
+                x = String.valueOf(travelNumber.charAt(i));
+                y = String.valueOf(travelNumber.charAt(i+1));
+                //System.out.println("{"+x+" "+travelNumber.charAt(i)+"} : " + y);
+                result.append(scare[Integer.valueOf(x)][Integer.valueOf(y)]);
             }
-            for (int i = 0; i < travelNumber.length(); i += 2) {
-                try {
-                    int x = Integer.parseInt(String.valueOf(travelNumber.charAt(i)));
-                    int y = Integer.parseInt(String.valueOf(travelNumber.charAt(i + 1)));
-                    result.append(scare[x][y]);
-                } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-                    System.out.println("Decoding error at indices " + i + " and " + (i + 1));
-                }
-            }
+
             result.append(" ");
+
         }
-        if (result.length() > 0) result.setLength(result.length() - 1); 
+        // Delete the last excess space generated
+        result.delete(result.length(), result.length());
         return result.toString();
     }
 
     @Override
-    public Boolean checkInputUserKey(String key) {
+    public Boolean checkInputUserMessageToEncryption(String message){
+        return !message.isEmpty() && message.matches("[a-z]+");
+    }
+
+    @Override
+    public Boolean checkInputUserMessageToDecryption(String message){
+        if (!message.matches(".*[a-zA-Z].*")){
+            System.out.println("Veuillez entrer un message contenant des nombres");
+            return false;
+        }
         return true;
     }
+
+    @Override
+    public Boolean checkInputUserKey(String key){
+        return true;
+    }
+
 }
