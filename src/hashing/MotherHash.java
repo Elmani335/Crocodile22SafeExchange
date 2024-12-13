@@ -4,9 +4,7 @@ import java.io.File;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-
+import menu.Menu;
 import utils.FileHandler;
 
 public abstract class MotherHash {
@@ -14,7 +12,6 @@ public abstract class MotherHash {
     String FOLDER_PATH;
     File selectedFile = null;
     String type;
-    String SECRET_SALT = "";
     String SECRET_PEPPER = "pepper";
 
     /**
@@ -122,22 +119,30 @@ public abstract class MotherHash {
             System.out.println("No file selected. Please create or select a file first.");
             return;
         }
-
+    
         System.out.print("Enter the message to add: ");
         String message = scanner.nextLine();
-
+    
         String resultHash;
         if (useHMAC) {
-            resultHash = calculateHMAC(message, SECRET_SALT, SECRET_PEPPER);
+            // Ask for the secret key when HMAC is being used
+            System.out.print("Enter the secret key: ");
+            String secretKey = scanner.nextLine();  // Get the secret key from the user
+    
+            // Calculate HMAC with the secret key
+            resultHash = calculateHMAC(message, Menu.user.getSalt(), SECRET_PEPPER, secretKey);
             System.out.println("\nHMAC Hash with Salt + Pepper: " + resultHash);
         } else {
+            // Calculate a regular hash
             resultHash = calculateHash(message);
             System.out.println("\nRegular Hash: " + resultHash);
         }
-
+    
+        // Write the result to the file
         String result = FileHandler.writeToFileHash(selectedFile, resultHash);
         System.out.println(result);
     }
+    
 
     /**
      * Method to calculate the HMAC (Hash-based Message Authentication Code) with salt and pepper.
@@ -149,30 +154,26 @@ public abstract class MotherHash {
      * @return The HMAC result as a hexadecimal string.
      * @throws NoSuchAlgorithmException If the HMAC algorithm is not available.
      */
-    private String calculateHMAC(String message, String salt, String pepper) throws NoSuchAlgorithmException {
+    private String calculateHMAC(String message, String salt, String pepper, String secretKey) throws NoSuchAlgorithmException {
         try {
-            String hmacAlgorithm = "HmacSHA256";
-            if (this.type.equals("md5")) {
-                hmacAlgorithm = "HmacMD5";
-            }
+            // Combine the message with salt and pepper
+            String messageWithSaltAndPepper = salt + message + pepper;
     
-            String messageWithSaltAndPepper = message + salt + pepper;
+            // Calculates the initial hash
+            String initialHash = calculateHash(messageWithSaltAndPepper);
     
-            Mac mac = Mac.getInstance(hmacAlgorithm);
-            SecretKeySpec secretKey = new SecretKeySpec(salt.getBytes(), hmacAlgorithm);
-            mac.init(secretKey);
+            // Adds the secret key to the initial hash
+            String hashWithKey = initialHash + secretKey;
     
-            byte[] hmacBytes = mac.doFinal(messageWithSaltAndPepper.getBytes());
-            StringBuilder hexHMAC = new StringBuilder();
-            for (byte b : hmacBytes) {
-                String hex = Integer.toHexString(0xff & b);
-                if (hex.length() == 1) hexHMAC.append('0');
-                hexHMAC.append(hex);
-            }
-            return hexHMAC.toString();
+            // Recalculate the final hash
+            String finalHash = calculateHash(hashWithKey);
+    
+            return finalHash;
         } catch (Exception e) {
             throw new NoSuchAlgorithmException("Error calculating HMAC: " + e.getMessage());
         }
     }
+    
+    
     
 }
