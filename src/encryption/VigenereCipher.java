@@ -67,4 +67,18 @@ public class VigenereCipher extends MotherEncryption{
         return !key.isEmpty();
     }
 
+    @Override
+    public Boolean checkInputUserMessageToDecryption(String message){
+        return checkInputUserMessageToEncryption(message);
+    }
+    
+    @Override
+    public Boolean checkInputUserMessageToEncryption(String message){
+        if (message.isEmpty() && message.matches("[a-z]+")){
+            System.out.println("Please enter only letters");
+            return false;
+        }
+        return true;
+    }
+
 }

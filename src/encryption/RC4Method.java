@@ -66,4 +66,14 @@ public class RC4Method extends MotherEncryption {
     public Boolean checkInputUserKey(String key) {
         return !key.isEmpty();
     }
+
+    @Override
+    public Boolean checkInputUserMessageToDecryption(String message){
+        return message.isEmpty();
+    }
+    
+    @Override
+    public Boolean checkInputUserMessageToEncryption(String message){
+        return message.isEmpty();
+    }
 }
