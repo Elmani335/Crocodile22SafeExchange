@@ -19,7 +19,6 @@ import utils.LoadingAudio;
 import java.io.IOException;
 
 
-
 public class Menu {
     private MotherEncryption polybius;
     private MotherEncryption vigenere;
@@ -30,7 +29,11 @@ public class Menu {
     private Random rand;
     private MotherEncryption rc4;
     private Steganography steganography;
-    
+    private User[] listUser = {
+        new User("Utilisateur 1","aer"),
+        new User("Utilisateur 2","prz")
+    };
+    public static User user;
 
     public Menu() {
         polybius = new PolybiusSquare();
@@ -42,16 +45,39 @@ public class Menu {
         rand = new Random();
         rc4 = new RC4Method();
         steganography = new Steganography();
-
     }
 
     public void display(Scanner scanner) throws NoSuchAlgorithmException {
         boolean exit = false;
 
         while (!exit) {
-            displayMainMenu();
-            String input = scanner.nextLine().trim();
+            String input;
             int choice;
+
+            displayControlUser();
+            input = scanner.nextLine().trim();
+            try {
+                choice = Integer.parseInt(input);
+                switch (choice) {
+                    case 1:
+                        user = listUser[0]; 
+                        break;
+                    case 2:
+                        user = listUser[1];
+                        break;
+                    case 3:
+                        Help help = new Help();
+                        help.display(scanner); 
+                        break;
+                    default:
+                        System.out.println("\nInvalid option, please choose a valid number from the list 2.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("\nInvalid input, please enter a number.");
+            }
+        
+            displayMainMenu();
+            input = scanner.nextLine().trim();
 
             try {
                 choice = Integer.parseInt(input);
@@ -110,6 +136,7 @@ public class Menu {
     }
 
     private void displayMainMenu() {
+        System.out.println("Hello "+user.name+" !");
         System.out.println("\n=====================================");
         System.out.println("             MAIN MENU              ");
         System.out.println("=====================================");
@@ -127,6 +154,19 @@ public class Menu {
         System.out.println("=====================================");
         System.out.print("Select an option: ");
 
+    }
+
+    private void displayControlUser(){
+        System.out.println("\n=====================================");
+        System.out.println("             Choucoudile              ");
+        System.out.println("=====================================");
+        System.out.println("Please login");
+        for (int i=0;i<listUser.length;i++){
+            System.out.println(" "+(i+1)+". "+listUser[i].name);
+        }
+        System.out.println(" 3. Help");
+        System.out.println("=====================================");
+        System.out.print("Select an option: ");
     }
 
     private void handleRandomNumberGeneration(Scanner scanner) {
