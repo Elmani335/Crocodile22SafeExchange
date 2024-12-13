@@ -1,11 +1,9 @@
-// Help.java
 package menu;
 
 import java.util.Scanner;
 
 public class Help {
-    public void display() {
-        Scanner scanner = new Scanner(System.in);
+    public void display(Scanner scanner) {
         boolean backToMainMenu = false;
 
         while (!backToMainMenu) {
@@ -29,19 +27,19 @@ public class Help {
 
                 switch (choice) {
                     case 1:
-                        displayEncryptionHelp();
+                        displayEncryptionHelp(scanner);
                         break;
                     case 2:
-                        displayDecryptionHelp();
+                        displayDecryptionHelp(scanner);
                         break;
                     case 3:
-                        displayRotXHelp();
+                        displayRotXHelp(scanner);
                         break;
                     case 4:
-                        displayVigenereHelp();
+                        displayVigenereHelp(scanner);
                         break;
                     case 5:
-                        displayPolybiusSquareHelp();
+                        displayPolybiusSquareHelp(scanner);
                         break;
                     case 0:
                         backToMainMenu = true;
@@ -53,53 +51,50 @@ public class Help {
                 System.out.println("\nInvalid input, please enter a number.");
             }
         }
-        scanner.close();
     }
 
-    private void displayEncryptionHelp() {
+    private void displayEncryptionHelp(Scanner scanner) {
         System.out.println("\n-------------------------------------");
         System.out.println("Encryption Help:");
         System.out.println("Use this option to encrypt your messages with different algorithms.");
         System.out.println("-------------------------------------");
-        returnToHelpMenu();
+        returnToHelpMenu(scanner);
     }
 
-    private void displayDecryptionHelp() {
+    private void displayDecryptionHelp(Scanner scanner) {
         System.out.println("\n-------------------------------------");
         System.out.println("Decryption Help:");
         System.out.println("Use this option to decrypt your encrypted messages.");
         System.out.println("-------------------------------------");
-        returnToHelpMenu();
+        returnToHelpMenu(scanner);
     }
 
-    private void displayRotXHelp() {
+    private void displayRotXHelp(Scanner scanner) {
         System.out.println("\n-------------------------------------");
         System.out.println("ROT(X) Encryption Help:");
         System.out.println("Learn about using ROT(X) for character shifting encryption.");
         System.out.println("-------------------------------------");
-        returnToHelpMenu();
+        returnToHelpMenu(scanner);
     }
 
-    private void displayVigenereHelp() {
+    private void displayVigenereHelp(Scanner scanner) {
         System.out.println("\n-------------------------------------");
         System.out.println("Vigenère Encryption Help:");
         System.out.println("Understand how to apply the Vigenère cipher with a keyword.");
         System.out.println("-------------------------------------");
-        returnToHelpMenu();
+        returnToHelpMenu(scanner);
     }
 
-    private void displayPolybiusSquareHelp() {
+    private void displayPolybiusSquareHelp(Scanner scanner) {
         System.out.println("\n-------------------------------------");
         System.out.println("Polybius Square Help:");
         System.out.println("Find out how to encrypt with the Polybius square method.");
         System.out.println("-------------------------------------");
-        returnToHelpMenu();
+        returnToHelpMenu(scanner);
     }
 
-    private void returnToHelpMenu() {
+    private void returnToHelpMenu(Scanner scanner) {
         System.out.println("\nPress Enter to return to the Help Menu...");
-        Scanner scanner = new Scanner(System.in);
         scanner.nextLine();
-        scanner.close();
     }
 }
