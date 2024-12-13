@@ -42,6 +42,7 @@ public class AESHandler extends MotherEncryption {
 
     @Override
     public String decipher(String messageEncryption, String key) {
+        Scanner scanner = new Scanner(System.in);
         try {
             // Use the provided key directly for decryption
             SecretKey secretKey = new SecretKeySpec(Base64.getDecoder().decode(key), "AES");
@@ -50,9 +51,12 @@ public class AESHandler extends MotherEncryption {
             byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(messageEncryption));
             return new String(decryptedBytes);
         } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Invalid key format. Ensure the key is a valid Base64-encoded AES key.");
+            System.out.println("Invalid key format. Returning to the menu.");
+            return null; // Return null to signal menu navigation
         } catch (Exception e) {
-            throw new RuntimeException("Error decrypting message: " + e.getMessage());
+            System.out.println("Error decrypting message: " + e.getMessage());
+            System.out.println("Returning to the menu.");
+            return null; // Return null to signal menu navigation
         }
     }
 
