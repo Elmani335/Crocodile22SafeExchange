@@ -255,7 +255,7 @@ public abstract class MotherEncryption {
             choice = scanner.nextLine().trim();
 
             // Check that it's an int
-            if (choice.matches(".*\\\\d.*")){
+            if (!choice.matches(".*\\\\d.*")){
                 choiceIsValide = true;
             }else{
                 System.out.println("Please enter a number");

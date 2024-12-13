@@ -2,6 +2,7 @@ package menu;
 
 import java.util.Scanner;
 import random.PseudoRandomGenerator;
+import steganography.Steganography;
 import encryption.Enigma;
 import encryption.MotherEncryption;
 import encryption.PolybiusSquare;
@@ -15,6 +16,10 @@ import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.util.Random;
 import utils.LoadingAudio;
+import steganography.Steganography;
+import java.io.IOException;
+
+
 
 public class Menu {
     private MotherEncryption polybius;
@@ -25,6 +30,8 @@ public class Menu {
     private MotherHash sha256;
     private Random rand;
     private MotherEncryption rc4;
+    private Steganography steganography;
+    
 
     public Menu() {
         polybius = new PolybiusSquare();
@@ -35,6 +42,8 @@ public class Menu {
         sha256 = new SHA256Hash();
         rand = new Random();
         rc4 = new RC4Method();
+        steganography = new Steganography();
+
     }
 
     public void display(Scanner scanner) throws NoSuchAlgorithmException {
@@ -74,6 +83,9 @@ public class Menu {
                         handleRandomNumberGeneration(scanner);
                         break;
                     case 9:
+                        handleSteganography(scanner);
+                        break;
+                    case 10:
                         Help help = new Help();
                         help.display(scanner); 
                         break;
@@ -92,10 +104,11 @@ public class Menu {
                 }
             } catch (NumberFormatException e) {
                 System.out.println("\nInvalid input, please enter a number.");
+            } catch (IOException e) {
+                System.err.println("Steganography error: " + e.getMessage());
             }
         }
     }
-
 
     private void displayMainMenu() {
         System.out.println("\n=====================================");
@@ -109,7 +122,8 @@ public class Menu {
         System.out.println(" 6. MD5 ");
         System.out.println(" 7. SHA256 ");
         System.out.println(" 8. Generate Pseudo Random Number");
-        System.out.println(" 9. Help");
+        System.out.println(" 9. Steganography");
+        System.out.println(" 10. Help");
         System.out.println(" 0. Exit");
         System.out.println("=====================================");
         System.out.print("Select an option: ");
@@ -133,6 +147,34 @@ public class Menu {
         PseudoRandomGenerator prg = new PseudoRandomGenerator(seed);
         prg.runLFSR(); // This runs the LFSR and prints the generated numbers
     }
+private void handleSteganography(Scanner scanner) throws IOException {
+    System.out.println("\nSteganography Options:");
+    System.out.println("1. Hide a message in an image");
+    System.out.println("2. Retrieve a hidden message from an image");
+    System.out.print("Choose an option: ");
+    int choice = Integer.parseInt(scanner.nextLine().trim());
+
+    System.out.print("Enter the image file path: ");
+    String imagePath = scanner.nextLine().trim();
+
+    switch (choice) {
+        case 1:
+            System.out.print("Enter the output image file path: ");
+            String outputImagePath = scanner.nextLine().trim();
+            System.out.print("Enter the message to hide: ");
+            String message = scanner.nextLine();
+            steganography.hideMessage(imagePath, outputImagePath, message);
+            System.out.println("Message successfully hidden in: " + outputImagePath);
+            break;
+        case 2:
+            String extractedMessage = steganography.retrieveMessage(imagePath);
+            System.out.println("Extracted message: " + extractedMessage);
+            break;
+        default:
+            System.out.println("Invalid option for steganography.");
+    }
+}
+
 
     private void handleEasterEgg() {
         System.out.println("🤔 Ah, 42... 🚀 But sadly, you're not at École 42. You're at the Coding Factory!");
