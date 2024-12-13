@@ -11,6 +11,7 @@ import encryption.VigenereCipher;
 import hashing.MD5Hash;
 import hashing.MotherHash;
 import hashing.SHA256Hash;
+import modernencryption.AESHandler;
 import encryption.RotXEncryption;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
@@ -20,11 +21,13 @@ import java.io.IOException;
 
 
 
+
 public class Menu {
     private MotherEncryption polybius;
     private MotherEncryption vigenere;
     private MotherEncryption rotX;
     private MotherEncryption enigma;
+    private MotherEncryption aes;
     private MotherHash md5;
     private MotherHash sha256;
     private Random rand;
@@ -42,6 +45,8 @@ public class Menu {
         rand = new Random();
         rc4 = new RC4Method();
         steganography = new Steganography();
+        aes = new AESHandler(); // Add AES Handler
+
 
     }
 
@@ -85,6 +90,9 @@ public class Menu {
                         handleSteganography(scanner);
                         break;
                     case 10:
+                        aes.controlPoster(scanner);
+                        break;
+                    case 11:
                         Help help = new Help();
                         help.display(scanner); 
                         break;
@@ -122,7 +130,8 @@ public class Menu {
         System.out.println(" 7. SHA256 ");
         System.out.println(" 8. Generate Pseudo Random Number");
         System.out.println(" 9. Steganography");
-        System.out.println(" 10. Help");
+        System.out.println(" 10. AES Encryption");
+        System.out.println(" 11. Help");
         System.out.println(" 0. Exit");
         System.out.println("=====================================");
         System.out.print("Select an option: ");
